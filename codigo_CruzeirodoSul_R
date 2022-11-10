@@ -1,0 +1,34 @@
+#função da probabilidade de estar dentro das especificações
+x   = seq(9.5,10.5, by =0.01)
+media = 9.897
+var   = 0.0987^2
+# função
+dx  = dnorm(x, mean = media, sd = sqrt(var))
+#plot da função
+plot(x,dx,type = "l", col = "black", ylab = bquote(f[X]~(x)~~"densidades"), xlab = "x",
+     main =  bquote("N"~(mu==.(media)~","~sigma^2 == .(var))))
+# poligono
+a = 9.9 # Limite inferior
+b = 10.1 # Limite superior
+da = dnorm(a,mean = media, sd = sqrt(var))  
+db = dnorm(b,mean = media, sd = sqrt(var))  
+
+polygon(x = c(a, a  , x[a<x & x<b], b), 
+        y = c(0, da , dx[a<x & x<b], 0),    
+        col = "magenta",
+        density = c(20),
+        angle = c(-45))
+
+# cálculo da probabilidade 
+prob = pnorm(b,mean = media, sd = sqrt(var)) - pnorm(a,mean = media, sd = sqrt(var)) 
+
+# legendas
+legenda <- list( bquote( "Probabilidade =" ~ .(round(prob,4)) )  )
+mtext(side = 3, do.call(expression, legenda), line=-2:-2, adj=1, col=c("magenta"))
+
+# valores no eixo x
+Map(axis, side=1, at = round(c(a,b),2),
+    col.axis = c("magenta" , "magenta"),
+    col.ticks = c("magenta", "magenta"),
+    lwd=0, las=1,
+    lwd.ticks = 2)
